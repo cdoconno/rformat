@@ -11,7 +11,7 @@ rformat is a nested list proccessor that helps manage:
 Based on a config, it reformats and returns data in a new structure. rformat can be used as a runtime formatter, with a config being supplied at time of call, or it can be preconfigured, passing along new result sets to the configured rformat object. rformat can be incorporated into a stream processor for pipelining.  
  
 ## Example
-rformat excels when you have a standard query result format or a denormalized row, but different consumers require custom changes. This turns the formatting into a config based operation instead of an explicit release to the underlying data server. 
+rformat excels when you have a standard query result format or a denormalized row, but different consumers require custom views. This turns the formatting into a config based operation instead of an explicit release to the underlying data server. 
 
 Consider the following data structure you might receive when requesting a report with multiple sections:
 ```
