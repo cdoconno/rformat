@@ -34,43 +34,52 @@ report = [
 Using the rformat config below, we show only the fields we care about, and reorder compared to our config
 ```
 set0:
-    0:
-         column: { first_name: first }
-         format:
+    0: 
+        col: first
+        alias: first_name
     1:
-         column: { last_name: last }
-         format:
+        col: last
+        alias: last_name
 set1:
     0:
-         column: { type: acct_type }
-         format:
+        col: acct_type
+        alias: type
+        format: 
+            - type: string
+              func: upper
+            - type: string
+              func: format
+              tmpl: "{0} Account"
     1:
-         column: { account: name }
-         format:
+        col: account
+        alias: name 
     2:
-         column: { account_number: account_no }
-         format:
+        col: account_number
+        alias: account_no 
     3:  
-         column: { opened: opened_on }
-         format:
-             date: {from: "%Y%m%dT%H%M%SZ" to: "%Y-%m-%d"}
+        col: opened_on
+        alias: opened
+        formats:
+            - type: date
+              from: "%Y%m%dT%H%M%SZ" 
+              to: "%Y-%m-%d"
 set3:
     0:
-         column: { transaction_id: _id }
-         format:
+        col: _id
+        alias: transaction_id
     1:
-         column: { account_number: account_no }
-         format:
+        col: account_no
+        alias: account_number
     2:
-         column: { debit_credit: debit_credit }
-         format:
-             string-replace: [
-                            {from: "credit", to: "CREDIT (+)"},
-                            {from: "debit", to: "DEBIT  (-)"}
-             ]
+        col: debit_credit
+        format:
+           - type: mapping
+             maps: 
+                from: "credit", to: "CREDIT (+)"
+                from: "debit", to: "DEBIT  (-)"
     3:  
-         column: { amount: amt }
-         format:
+         alias: amount
+         col: amt 
 ```
 And then data is returned in the following structure, which can be passed directly to whatever is responsible for writing the data. 
 ```
@@ -79,8 +88,8 @@ And then data is returned in the following structure, which can be passed direct
     { "first_name": "Jane", "last_name": "Smith"}
   ],
   [ 
-    { type": "Checking", "account": "Checking", "account_number": "2984039756", "opened": "2006-05-12"},
-    { type": "Savings", "account": "Rainy Day", "account_number": "4528929834", "opened": "2003-03-05"}
+    { type": "CHECKING Account", "account": "Checking", "account_number": "2984039756", "opened": "2006-05-12"},
+    { type": "SAVINGS Account", "account": "Rainy Day", "account_number": "4528929834", "opened": "2003-03-05"}
   ],
   [
     { "transaction_id": 10980, "account_number": "2984039756", "debit_credit": "DEBIT  (-)", "amount": 430.30 },
