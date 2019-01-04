@@ -7,7 +7,7 @@ def default_config():
     Returns the default options rformat will use
     """
     return {
-       "asDict": True,
+       "log_level": "DEBUG"
     }
 
 def parse_yaml(confpath):
