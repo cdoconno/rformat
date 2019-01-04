@@ -16,7 +16,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Added this changelog
-
+- Added class structure Results -> ResultSet -> Row
+- - Row is names tuple with rowdef and data properties
+- - ResultSet is collection of Rows
+- - Results is collection of ResultSets
+- Added test cases for Row and ResultSet with pytest framework
 
 ## [0.0.1] - 2018-12-25
 * Merry Christmas, here's a formatter
