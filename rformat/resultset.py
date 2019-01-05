@@ -33,10 +33,10 @@ class ResultSet(object):
         self.row_count = 0
         self.error_count = 0
         self._initresults(results)
-        self.initialize_rows()
+        self._initialize_rows()
 
 
-    def initialize_rows(self):
+    def _initialize_rows(self):
         """
         Process rows from a generator object
         """
