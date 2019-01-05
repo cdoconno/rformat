@@ -14,6 +14,7 @@ class Results():
     def __init__(self):
         self.setCount = 0
         self.resultSets = []
+        self.converter = None # TODO add plugin support to convert common result frameworks
 
 class ResultSet(object):
     """
@@ -26,9 +27,45 @@ class ResultSet(object):
             self.order_map = order_map
         self.headers, self.header_source = self._manageheaders(headers)
         self.rowdef = collections.namedtuple("RsRow", self.headers, verbose=False, rename=True)
+        self.generate_rows = None
         self.rows = []
-        self.rowCount = None
+        self.errors = []
+        self.row_count = 0
+        self.error_count = 0
+        self._initresults(results)
+        self.initialize_rows()
 
+
+    def initialize_rows(self):
+        """
+        Process rows from a generator object
+        """
+        for row in self.generate_rows:
+            self.addrow(row)
+        log.debug("rows: %s, rowcount: %s, errors: %s, errorcount: %s" % (self.rows, self.row_count, self.errors, self.error_count))
+
+    def addrow(self, row):
+        """
+        Add a single row to resultset
+        """
+        try:
+            self.rows.append(Row(row, self.rowdef))
+            self.row_count += 1
+        except:
+            self.errors.append(row)
+            self.error_count += 1
+
+    def _initresults(self, results):
+        """
+        Determine what was type results were passed and handle accordingly.
+        Supports list, generator, or iterator
+        """
+        try:
+            self.generate_rows = (row for row in results) # generator 
+        except TypeError:
+            raise TypeError("ResultSet results must be iterable")
+
+        
     def _manageheaders(self, headers):
         """
         Type checking for headers and order map provided to result set
