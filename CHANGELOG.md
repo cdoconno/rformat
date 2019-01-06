@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - - ResultSet is collection of Rows
 - - Results is collection of ResultSets
 - Added test cases for Row and ResultSet with pytest framework
+- Added benchmarking utility
+- Added config file formatter
 
 ## [0.0.1] - 2018-12-25
 * Merry Christmas, here's a formatter
