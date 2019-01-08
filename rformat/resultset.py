@@ -32,15 +32,27 @@ class ResultSet(object):
         self.errors = []
         self.row_count = 0
         self.error_count = 0
+        self.results = results
         self._initresults(results)
-        self._initialize_rows()
+        self.initialize_rows()
 
 
-    def _initialize_rows(self):
+    def _initresults(self, results):
+        """
+        Determine what was type results were passed and handle accordingly.
+        Supports list, generator, or iterator
+        """
+        try:
+            self.generate_rows = (row for row in results) # generator 
+        except TypeError:
+            raise TypeError("ResultSet results must be iterable")
+
+    def initialize_rows(self):
         """
         Process rows from a generator object
         """
         for row in self.generate_rows:
+            #log.debug("processing row: %s" % (row))
             self.addrow(row)
         log.debug("rows: %s, rowcount: %s, errors: %s, errorcount: %s" % (self.rows, self.row_count, self.errors, self.error_count))
 
@@ -54,16 +66,6 @@ class ResultSet(object):
         except:
             self.errors.append(row)
             self.error_count += 1
-
-    def _initresults(self, results):
-        """
-        Determine what was type results were passed and handle accordingly.
-        Supports list, generator, or iterator
-        """
-        try:
-            self.generate_rows = (row for row in results) # generator 
-        except TypeError:
-            raise TypeError("ResultSet results must be iterable")
 
         
     def _manageheaders(self, headers):

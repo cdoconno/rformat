@@ -28,7 +28,7 @@ class TestRow(object):
         [100.1],
         ["foo"],
     ], scope="class")
-    def test_normalize_row_raises_type_error_for_incorrect_types(self, values):
+    def test_normalize_row_raises_type_error_for_incorrect_value_types(self, values):
         rs = resultset.ResultSet(values, ['a', 'b', 'c'])
         with pytest.raises(TypeError):
             resultset.Row._normalize_row(values[0], rs.rowdef)
@@ -48,4 +48,40 @@ class TestRow(object):
 
 
 class TestResultSet(object):
-    pass
+    @pytest.mark.parametrize("value,headers,order_map", [
+       ([[1, 2, 3]], ['a', 'b', 'c'], None), # list
+    ], scope="class")
+    def test_can_create_result_set(self, value, headers, order_map):
+        rs = resultset.ResultSet(value, headers, order_map)
+        assert isinstance(rs, resultset.ResultSet)
+
+    @pytest.mark.parametrize("value,headers,order_map", [
+       ([[1, 2, 3]], ['a', 'b', 'c'], None), # list
+    ], scope="class")
+    def test_result_set_add_row_sets_rowcount_on_intilization(self, value, headers, order_map):
+        rs = resultset.ResultSet(value, headers, order_map)
+        assert rs.row_count == 1
+
+    @pytest.mark.parametrize("value3,headers3,order_map3", [
+       ([[1, 2, 3], [4, 5, 6]], ['a', 'b', 'c'], None), # list
+    ], scope="class")
+    def test_result_set_add_row_sets_rowcount_on_intilization_w_mutlirow_set(self, value3, headers3, order_map3):
+        rs = resultset.ResultSet(value3, headers3, order_map3)
+        assert rs.row_count == 2
+
+    @pytest.mark.parametrize("value4,headers4,order_map4", [
+       ([[1, 2, 3], [4, 5, 6]], ['a', 'b', 'c'], None), # list
+    ], scope="class")
+    def test_result_set_add_row_works_and_increments_rowcount(self, value4, headers4, order_map4):
+        rs = resultset.ResultSet(value4, headers4, order_map4)
+        assert rs.row_count == 2
+        #r = resultset.Row([6, 7, 8], rs.rowdef)
+        rs.addrow([6, 7, 8])
+        assert rs.row_count == 3
+        assert list(rs.rows[2].data) == [6, 7, 8] # also tests that list() preserves ordering of tuple by prop name
+
+
+
+
+
+
