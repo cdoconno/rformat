@@ -1,6 +1,7 @@
 import pytest
 import sys
 import collections
+import types
 
 from rformat import resultset 
 
@@ -48,18 +49,33 @@ class TestRow(object):
 
 
 class TestResultSet(object):
-    @pytest.mark.parametrize("value,headers,order_map", [
+    @pytest.mark.parametrize("value1,headers1,order_map1", [
        ([[1, 2, 3]], ['a', 'b', 'c'], None), # list
     ], scope="class")
-    def test_can_create_result_set(self, value, headers, order_map):
-        rs = resultset.ResultSet(value, headers, order_map)
+    def test_can_create_result_set(self, value1, headers1, order_map1):
+        rs = resultset.ResultSet(value1, headers1, order_map1)
         assert isinstance(rs, resultset.ResultSet)
 
-    @pytest.mark.parametrize("value,headers,order_map", [
-       ([[1, 2, 3]], ['a', 'b', 'c'], None), # list
+    def test_result_set_generate_rows_is_a_generator_after_init(self):
+        rs = resultset.ResultSet([[1, 2, 3]], ['a', 'b', 'c'], None)
+        assert type(rs.generate_rows) is types.GeneratorType
+
+    @pytest.mark.parametrize("gen,genheaders,order_map_gen", [
+       ((row for row in [[1, 2, 3]]), ['a', 'b', 'c'], None), # list
+       ((row for row in [(1, 2, 3)]), ['a', 'b', 'c'], None), # tuple
+       ((row for row in [{'a': 1, 'b': 2, 'c': 3}]), ['a', 'b', 'c'] , {0:'a', 1:'b', 2:'c'}), # test dict
     ], scope="class")
-    def test_result_set_add_row_sets_rowcount_on_intilization(self, value, headers, order_map):
-        rs = resultset.ResultSet(value, headers, order_map)
+    def test_result_set_can_take_a_generator_on_initialization(self, gen, genheaders, order_map_gen):
+        assert type(gen) is types.GeneratorType
+        rs = resultset.ResultSet(gen, genheaders, order_map_gen)
+        assert type(rs.generate_rows) is types.GeneratorType
+
+    @pytest.mark.parametrize("value2,headers2,order_map2", [
+       ([[1, 2, 3]], ['a', 'b', 'c'], None), # list
+       ((row for row in [[1, 2, 3]]), ['a', 'b', 'c'], None), # list
+    ], scope="class")
+    def test_result_set_add_row_sets_rowcount_on_intilization(self, value2, headers2, order_map2):
+        rs = resultset.ResultSet(value2, headers2, order_map2)
         assert rs.row_count == 1
 
     @pytest.mark.parametrize("value3,headers3,order_map3", [
@@ -79,6 +95,21 @@ class TestResultSet(object):
         rs.addrow([6, 7, 8])
         assert rs.row_count == 3
         assert list(rs.rows[2].data) == [6, 7, 8] # also tests that list() preserves ordering of tuple by prop name
+
+    @pytest.mark.parametrize("value5,headers5,order_map5", [
+       ([[1, 2]], ['a', 'b', 'c'], None), # list
+    ], scope="class")
+    def test_result_set_add_row_onfail_tracks_errors_and_increments_errorcount(self, value5, headers5, order_map5):
+        rs = resultset.ResultSet(value5, headers5, order_map5)
+        assert rs.row_count == 0
+        assert rs.error_count == 1
+        rs.addrow([6, 7, 8])
+        rs.addrow([9, 10])
+        assert rs.row_count == 1
+        assert rs.error_count == 2
+        assert list(rs.rows[0].data) == [6, 7, 8]
+        assert type(rs.errors) is list
+        assert rs.errors == [[1,2],[9,10]]
 
 
 

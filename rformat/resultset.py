@@ -32,7 +32,7 @@ class ResultSet(object):
         self.errors = []
         self.row_count = 0
         self.error_count = 0
-        self.results = results
+        #self.results = results
         self._initresults(results)
         self.initialize_rows()
 
