@@ -3,18 +3,35 @@
 import logging
 import sys
 import collections
+import types
 
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
-class Results():
+class Results(object):
     """
-    Collection of ResultSet objects that rformat functions rely on
+    Collection of ResultSet objects with focus on initialization flexibility
     """
-    def __init__(self):
+    def __init__(self, result_sets=[]):
         self.setCount = 0
-        self.resultSets = []
+        self.result_sets = self._initresultsets(result_sets)
         self.converter = None # TODO add plugin support to convert common result frameworks
+
+    def _initresultsets(self, result_sets):
+        """
+        Determine what type of resultsets were passed in handle accordingly.
+        Supports list, generator, or iterator
+        """
+        if type(result_sets) is types.GeneratorType:
+            self.generate_resultsets = result_sets
+            return
+        try:
+            self.generate_resultsets = (row for row in result_sets) # generator 
+        except TypeError:
+            raise TypeError("Result resultset must be iterable")
+
+    #def intialize_resultsets(self)
+
 
 class ResultSet(object):
     """
@@ -42,6 +59,9 @@ class ResultSet(object):
         Determine what was type results were passed and handle accordingly.
         Supports list, generator, or iterator
         """
+        if type(results) is types.GeneratorType:
+            self.generate_rows = results
+            return
         try:
             self.generate_rows = (row for row in results) # generator 
         except TypeError:

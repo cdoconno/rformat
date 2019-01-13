@@ -22,7 +22,6 @@ class TestRow(object):
         assert r.data.a == 1 # test we can access data fields with dot notation
         #assert r.data.get('a', None) == 1 # test we can access data fields with get notation
         assert r.rowdef is rs.rowdef # test standalone row rowdef is reference to result set rowdef
-        assert r.rowdef == rs.rowdef # test standalone row rowdef is reference to result set rowdef
 
     @pytest.mark.parametrize("values", [
         [100],
@@ -112,6 +111,14 @@ class TestResultSet(object):
         assert rs.errors == [[1,2],[9,10]]
 
 
+class TestResults(object):
+    @pytest.mark.parametrize("value1,headers1,order_map1", [
+       ([[1, 2, 3]], ['a', 'b', 'c'], None), # list
+    ], scope="class")
+    def test_can_create_result_set(self, value1, headers1, order_map1):
+        rs = resultset.ResultSet(value1, headers1, order_map1)
+        results = resultset.Results([rs])
+        assert isinstance(results, resultset.Results)
 
 
 
