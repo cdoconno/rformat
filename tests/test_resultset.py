@@ -119,6 +119,14 @@ class TestResults(object):
         rs = resultset.ResultSet(value1, headers1, order_map1)
         results = resultset.Results([rs])
         assert isinstance(results, resultset.Results)
+    @pytest.mark.parametrize("rs,config", [
+        (resultset.ResultSet([[1, 2, 3]], ['a', 'b', 'c'], None), -1),
+        (resultset.ResultSet([[1, 2, 3]], ['a', 'b', 'c'], None), []),
+        (resultset.ResultSet([[1, 2, 3]], ['a', 'b', 'c'], None), "failstring"),
+    ], scope="class")
+    def test_manage_config_raises_type_error_when_opts_not_dict(self, rs, config):
+        with pytest.raises(TypeError):
+            resultset.Results([rs], config)
 
 
 
