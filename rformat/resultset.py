@@ -14,9 +14,11 @@ class Results(object):
     """
     def __init__(self, result_sets=[], config={}):
         self.setCount = 0
-        self.config = self._manageconfig(config)
-        self.result_sets = self._initresultsets(result_sets)
+        self.config = {}
+        self.result_sets = []
         self.converter = None # TODO add plugin support to convert common result frameworks
+        self._manageconfig(config)
+        self._initresultsets(result_sets)
 
     def _initresultsets(self, result_sets):
         """
@@ -25,7 +27,7 @@ class Results(object):
         """
         if type(result_sets) is types.GeneratorType:
             self.generate_resultsets = result_sets
-            return
+            return 
         try:
             self.generate_resultsets = (row for row in result_sets) # generator 
         except TypeError:

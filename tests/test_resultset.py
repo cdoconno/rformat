@@ -128,6 +128,15 @@ class TestResults(object):
         with pytest.raises(TypeError):
             resultset.Results([rs], config)
 
+    @pytest.mark.parametrize("rs1,config1", [
+        (resultset.ResultSet([[1, 2, 3]], ['a', 'b', 'c'], None), {"test": True}),
+    ], scope="class")
+    def test_manage_config_sets_self_config(self, rs1, config1):
+        result = resultset.Results([rs1], config1)
+        assert result.config == {"test": True}
+
+
+
 
 
 
