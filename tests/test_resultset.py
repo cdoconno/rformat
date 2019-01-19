@@ -128,9 +128,23 @@ class TestResultSet(object):
         assert type(resultset.ResultSet._sort_order_map) is types.FunctionType # function exists
         assert resultset.ResultSet._sort_order_map(test_order_map).keys() == ordered_map_keys
 
+    @pytest.mark.parametrize("test_order_map1", [
+        ({'x': {}, '1': {}}),   # str keys for character not just digit
+    ], scope="class")
+    def test_result_sort_order_map_raises_value_error_if_can_not_convert_key_to_float(self, test_order_map1) :
+        with pytest.raises(ValueError):
+            resultset.ResultSet._sort_order_map(test_order_map1).keys()
 
-        
+    @pytest.mark.parametrize("test_order_map2", [
+        ("0"),         # str, not dict
+        (0),           # int, not dict
+        ([0, 1, 2]),   # list, not dict
+    ], scope="class")
+    def test_result_sort_order_map_raises_type_error_if_not_provided_dict(self, test_order_map2) :
+        with pytest.raises(TypeError):
+            resultset.ResultSet._sort_order_map(test_order_map2).keys()
 
+    
 
 
 
