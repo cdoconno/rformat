@@ -16,10 +16,8 @@ class Results(object):
     """
     Collection of ResultSet objects with focus on initialization flexibility
     """
-    def __init__(self, result_sets=[], config={}):
+    def __init__(self, result_sets=None, config=None):
         self.setCount = 0
-        self.config = {}
-        self.result_sets = []
         self.converter = None # TODO add plugin support to convert common result frameworks
         self._manageconfig(config)
         self._initresultsets(result_sets)
@@ -32,18 +30,22 @@ class Results(object):
         if type(result_sets) is types.GeneratorType:
             self.generate_resultsets = result_sets
             return 
+        if result_sets == None:
+            resultsets = []
         try:
             self.generate_resultsets = (row for row in result_sets) # generator 
         except TypeError:
             raise TypeError("Result resultset must be iterable")
 
-    def _manageconfig(self, opts={}):
+    def _manageconfig(self, opts):
         """
         Validate config for resultset
         """
+        if opts == None:
+            opts = {}
         if type(opts) != dict:
             raise TypeError("config for Result needs to be dict type")
-        self.config = opts
+        self.config = dict(opts)
 
 
 
