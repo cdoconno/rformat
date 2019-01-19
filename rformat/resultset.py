@@ -8,6 +8,10 @@ import types
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
+DEFAULT ="\033[0m"
+BOLD    ="\033[1m"
+
+
 class Results(object):
     """
     Collection of ResultSet objects with focus on initialization flexibility
@@ -71,7 +75,6 @@ class ResultSet(object):
     def _initresults(self, results):
         """
         Determine what was type results were passed and handle accordingly.
-        Supports list, generator, or iterator
         """
         if type(results) is types.GeneratorType:
             self.generate_rows = results
@@ -134,7 +137,14 @@ class ResultSet(object):
         print("order_map: %s" % order_map)
         if type(order_map) != dict:
             raise TypeError("must provide dict to define ordermapping as '{float: key_string}'. provided %s" % order_map)
-        return collections.OrderedDict([(k, order_map[k]) for k in sorted(order_map.keys())])
+        try:
+            converted_keys = [(k, float(k)) for k in order_map.keys()]
+        except ValueError as e:
+            print "ValueError: {0}".format(e)
+            print "%s[TIP]%s     : check that all keys provided in order map can be converted to floats" % ('\033[1m', '\033[0m')
+            raise
+
+        return collections.OrderedDict([(ck, order_map[k]) for k, ck in sorted(converted_keys, key=lambda x: x[1])])
 
             
     

@@ -111,6 +111,30 @@ class TestResultSet(object):
         assert rs.errors == [[1,2],[9,10]]
 
 
+    @pytest.mark.parametrize("test_order_map,ordered_map_keys", [
+        ({'0': {}, '1': {}}, [0.0, 1.0]),   # str keys proper order
+        ({'1': {}, '0': {}}, [0.0, 1.0]),   # str keys out of order
+        ({'1': {}, '0.0': {}}, [0.0, 1.0]), # str keys w decimals out of order
+        ({1: {}, '0.0': {}}, [0.0, 1.0]),   # mixed keys w decimals out of order
+        ({1: {}, 0: {}}, [0.0, 1.0]),       # int keys out of order
+        ({1: {}, 0.0: {}}, [0.0, 1.0]),     # int and float keys out of order
+        ({-1: {}, 0.0: {}}, [-1.0, 0.0]),   # int and float with negatives being first
+        ({-1.0: {}, -1.5: {}}, [-1.5, -1.0]), # negatives floats larger negative first
+        ({'1':{}, '11':{}, '2':{}, '20':{}}, [1.0, 2.0, 11.0, 20.0]), # str keys to ensure 11 not ordered before 2 like strings
+        ({"-1": {}, "0.0": {}}, [-1.0, 0.0]), # strings with negatives being first
+        ({-1e-5: {}, 0.0: {}, 1e-5: {}, "1e5":{}}, [-0.00001, 0.0, 0.00001, 100000.0]), # scientific notitation and float mix with negative sci notation
+    ], scope="class")
+    def test_result_sort_order_map_sorts_dict_by_int_keys(self, test_order_map, ordered_map_keys):
+        assert type(resultset.ResultSet._sort_order_map) is types.FunctionType # function exists
+        assert resultset.ResultSet._sort_order_map(test_order_map).keys() == ordered_map_keys
+
+
+        
+
+
+
+
+
 class TestResults(object):
     @pytest.mark.parametrize("value1,headers1,order_map1", [
        ([[1, 2, 3]], ['a', 'b', 'c'], None), # list
@@ -119,6 +143,7 @@ class TestResults(object):
         rs = resultset.ResultSet(value1, headers1, order_map1)
         results = resultset.Results([rs])
         assert isinstance(results, resultset.Results)
+
     @pytest.mark.parametrize("rs,config", [
         (resultset.ResultSet([[1, 2, 3]], ['a', 'b', 'c'], None), -1),
         (resultset.ResultSet([[1, 2, 3]], ['a', 'b', 'c'], None), []),
