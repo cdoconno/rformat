@@ -1,4 +1,4 @@
-"""Manage a resultset that rformatter will understand"""
+"""Manage a resultset thatrformatter will understand"""
 
 import logging
 import sys
