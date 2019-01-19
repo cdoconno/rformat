@@ -134,14 +134,13 @@ class ResultSet(object):
         """
         returns and ordered dict of keys based on an order_map dict with floats/ints as keys
         """
-        print("order_map: %s" % order_map)
         if type(order_map) != dict:
             raise TypeError("must provide dict to define ordermapping as '{float: key_string}'. provided %s" % order_map)
         try:
             converted_keys = [(k, float(k)) for k in order_map.keys()]
         except ValueError as e:
-            print "ValueError: {0}".format(e)
-            print "%s[TIP]%s     : check that all keys provided in order map can be converted to floats" % ('\033[1m', '\033[0m')
+            print("ValueError: {0}".format(e))
+            print("%s[TIP]%s     : check that all keys provided in order map can be converted to floats" % ('\033[1m', '\033[0m'))
             raise
 
         return collections.OrderedDict([(ck, order_map[k]) for k, ck in sorted(converted_keys, key=lambda x: x[1])])
