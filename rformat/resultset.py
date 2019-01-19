@@ -31,7 +31,7 @@ class Results(object):
             self.generate_resultsets = result_sets
             return 
         if result_sets == None:
-            resultsets = []
+            result_sets = []
         try:
             self.generate_resultsets = (row for row in result_sets) # generator 
         except TypeError:
