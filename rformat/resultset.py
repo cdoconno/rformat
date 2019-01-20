@@ -30,7 +30,7 @@ class Results(object):
         if type(result_sets) is types.GeneratorType:
             self.generate_resultsets = result_sets
             return 
-        if result_sets == None:
+        if result_sets is None:
             result_sets = []
         try:
             self.generate_resultsets = (row for row in result_sets) # generator 
@@ -41,7 +41,7 @@ class Results(object):
         """
         Validate config for resultset
         """
-        if opts == None:
+        if opts is None:
             opts = {}
         if type(opts) != dict:
             raise TypeError("config for Result needs to be dict type")
@@ -111,25 +111,25 @@ class ResultSet(object):
         """
         Type checking for headers and order map provided to result set
         """
-        if self.order_map != None and headers != None:
+        if self.order_map is not None and headers is not None:
             # use headers if both are provided
             #raise TypeError("ResultSet() requires and order_map or headers, not both")
             if type(headers) != list:
                 raise TypeError("ResultSet() requires headers as list when no order_map provided")
             else:
-                return headers, "headers priority"
-        if self.order_map == None:
-            if headers == None:
+                return list(headers), "headers priority"
+        if self.order_map is None:
+            if headers is None:
                 raise TypeError("ResultSet() requires headers or order_map (neither given)")
             elif type(headers) != list:
                 raise TypeError("ResultSet() requires headers as list when no order_map provided")
             else:
                 return headers, "headers"
-        if headers == None:
+        if headers is None:
             if type(self.order_map) != collections.OrderedDict:
                 raise TypeError("ResultSet() requires order_map as dict with no headers. provided:  type(self.order_map)")
             else:
-                return self.order_map.values(), "order_map"
+                return list(self.order_map.values()), "order_map"
     
     @staticmethod
     def _sort_order_map(order_map):

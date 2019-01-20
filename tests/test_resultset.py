@@ -41,7 +41,6 @@ class TestRow(object):
     def test_normalize_row_returns_named_tuple(self, value, headers, order_map):
         rs = resultset.ResultSet(value, headers, order_map)
         r = resultset.Row._normalize_row(value[0], rs.rowdef)
-        print r.a
         assert r.a == 1
         assert r.b == 2
         assert r.c == 3
