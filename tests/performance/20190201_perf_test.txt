@@ -1,0 +1,7 @@
+$ python perf_rows.py
+@timecall: gen_1k took 0.0745031833649 seconds
+@timecall: gen_10k took 0.078381061554 seconds
+@timecall: gen_100k took 0.843542098999 seconds
+@timecall: gen_1m took 9.00869703293 seconds
+@timecall: gen_10m took 118.726877928 seconds
+done

@@ -5,7 +5,7 @@ import sys
 import collections
 import types
 
-logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)
 
 DEFAULT ="\033[0m"
@@ -154,7 +154,6 @@ class Row(object):
     Row of data that can be initialized from tuple, list, dict
     """
     def __init__(self, values, rowdef=None):
-       # self.rowdef = rowdef
         self.data = self._normalize_row(values, rowdef)
 
     def rowdef(self):
