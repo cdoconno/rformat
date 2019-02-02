@@ -21,7 +21,8 @@ class TestRow(object):
         assert list(r.data) == eqcheck # test data correct 
         assert r.data.a == 1 # test we can access data fields with dot notation
         #assert r.data.get('a', None) == 1 # test we can access data fields with get notation
-        assert r.rowdef is rs.rowdef # test standalone row rowdef is reference to result set rowdef
+        #assert r.rowdef is rs.rowdef # test standalone row rowdef is reference to result set rowdef
+        assert r.rowdef() == rs.rowdef._fields
 
     @pytest.mark.parametrize("values", [
         [100],

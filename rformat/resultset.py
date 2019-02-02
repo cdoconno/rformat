@@ -154,8 +154,11 @@ class Row(object):
     Row of data that can be initialized from tuple, list, dict
     """
     def __init__(self, values, rowdef=None):
-        self.rowdef = rowdef
+       # self.rowdef = rowdef
         self.data = self._normalize_row(values, rowdef)
+
+    def rowdef(self):
+        return self.data._fields
 
     @staticmethod
     def _normalize_row(values, rowdef):
