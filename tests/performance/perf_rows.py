@@ -40,7 +40,13 @@ def gen_10k():
 
 @bench.timethis
 def gen_100k():
+    mem_init = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
     rs = resultset.ResultSet([hun_k], None, ORDER_MAP)
+    mem_final = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    print mem_init / 1024 / 1024
+    print("Initial Memory: {:14} B".format(mem_init))
+    print("  Final Memory: {:14} B".format(mem_final))
+    print("  Usage Memory: {:14} MB".format((mem_final - mem_init)/1024/1024))
 
 @bench.timethis
 def gen_1m():
@@ -56,6 +62,6 @@ if __name__=='__main__':
     gen_10k()
     gen_100k()
     gen_1m()
-    gen_10m()
+    #gen_10m()
     print("done")
 
