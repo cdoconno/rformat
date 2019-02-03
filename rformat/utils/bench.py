@@ -31,7 +31,7 @@ def timethis(fmt_func=None, verbose=True):
     return decorator
 
 
-def trackmem(print_fmt=DEFAULT_MEMORY_FMT, verbose=True, unit="MB"):
+def trackmem(fmt_func=None, verbose=True, unit="MB"):
     """
     Paramaterized decorator for tracking memory usage of a function calls via resource module
     
@@ -46,7 +46,10 @@ def trackmem(print_fmt=DEFAULT_MEMORY_FMT, verbose=True, unit="MB"):
             usage = m2-m1
             cv = size([m1, m2, usage], unit)
             if verbose:
-                print(print_fmt.format(func.func_name, cv[0], cv[1], cv[2], unit.upper()))
+                if fmt_func is None:
+                    print(DEFAULT_MEMORY_FMT.format(func.func_name, cv[0], cv[1], cv[2], unit.upper()))
+                else:
+                    print(fmt_func(func.func_name, cv[0], cv[1], cv[2], unit.upper()))
             return result
         return memtrack_call
     return decorator

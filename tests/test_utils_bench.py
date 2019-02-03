@@ -125,6 +125,24 @@ class TestBenchmarkMemory(object):
         trackmemfoo_stdout_regex = re.compile(r"@trackmem: foo_mem start: (\d+\.\d+) end: (\d+\.\d+) used: (\d+\.\d+) (B|KB|MB|GB)")
         assert trackmemfoo_stdout_regex.match(captured_stdouterr.out) is not None
 
+    def test_bench_as_decorator_trackmem_does_print_timing_info_to_stdout_when_passed_func(self, capsys):
+        """ capsys variable is a pytest function to capture system error and output
+        """
+        def fmt_mem(func_name, start_mem, end_mem, usage, unit):
+            return "track mem {} {}, start: {}, end: {}, usage: {}".format(unit, func_name, start_mem, end_mem, usage)
+
+        @bench.trackmem(fmt_func=fmt_mem, verbose=True)
+        def foo_mem(numrows):
+            rows = []
+            for _ in xrange(numrows):
+                rows.append({'a': str(uuid.uuid4()), 'b': str(uuid.uuid4()), 'c': str(uuid.uuid4())})
+            return rows
+        _ = foo_mem(10**3)
+        captured_stdouterr = capsys.readouterr()
+        trackmemfoo_stdout_regex = re.compile(r"track mem MB foo_mem, start: (\d+\.\d+), end: (\d+\.\d+), usage: (\d+\.\d+)")
+        assert trackmemfoo_stdout_regex.match(captured_stdouterr.out) is not None
+
+
 
 @pytest.mark.parametrize("size_value", [
     0,
