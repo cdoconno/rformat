@@ -7,9 +7,12 @@ import resource
 DEFAULT_TIMING_FMT = "@timecall: {0} took {1} seconds" 
 DEFAULT_MEMORY_FMT = "@trackmem: {0} start: {1} end: {2} used: {3} {4}" 
 
-def timethis(timing_fmt=DEFAULT_TIMING_FMT, verbose=True):
+def timethis(fmt_func=None, verbose=True):
     """
     Parameterized decorator for tracking time of a function call
+
+    :fmt_func is a string formatting function that should take func_name, duration
+              paramters and return a string to print the timing info
     """
     def decorator(func):
         @wraps(func)
@@ -19,7 +22,10 @@ def timethis(timing_fmt=DEFAULT_TIMING_FMT, verbose=True):
             t2 = tm()
             d = t2-t1
             if verbose:
-                print(timing_fmt.format(func.func_name, d))
+                if fmt_func is None:
+                    print(DEFAULT_TIMING_FMT.format(func.func_name, d))
+                else:
+                    print(fmt_func(func.func_name, d))
             return result
         return time_call
     return decorator

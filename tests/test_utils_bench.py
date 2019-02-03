@@ -80,10 +80,10 @@ class TestBenchmarking(object):
         timefoo_stdout_regex = re.compile(r"@timecall: foo4 took (\d+\.\d+) seconds")
         assert timefoo_stdout_regex.match(captured_stdouterr.out) is not None
 
-    def test_bench_as_decorator_timethis_does_print_timing_info_to_stdout_in_non_default(self, capsys):
+    def test_bench_as_decorator_timethis_does_print_timing_info_to_stdout_with_lambda(self, capsys):
         """ capsys variable is a pytest function to capture system error and output
         """
-        @bench.timethis(timing_fmt="Took {1} seconds", verbose=True)
+        @bench.timethis(fmt_func=lambda f, d: "Took {duration} seconds".format(**{"duration": d}), verbose=True)
         def foo4(x):
             time.sleep(.001)
             return x
@@ -91,6 +91,22 @@ class TestBenchmarking(object):
         captured_stdouterr = capsys.readouterr()
         timefoo_stdout_regex = re.compile(r"Took (\d+\.\d+) seconds")
         assert timefoo_stdout_regex.match(captured_stdouterr.out) is not None
+
+
+    def test_bench_as_decorator_timethis_does_print_timing_info_to_stdout_with_def_func(self, capsys):
+        """ capsys variable is a pytest function to capture system error and output
+        """
+        def format_timing(func_name, duration):
+            return "Function %s took %s" % (func_name, duration)
+        @bench.timethis(fmt_func=format_timing, verbose=True)
+        def foo4(x):
+            time.sleep(.001)
+            return x
+        _ = foo4(x=10)
+        captured_stdouterr = capsys.readouterr()
+        timefoo_stdout_regex = re.compile(r"Function foo4 took (\d+\.\d+)")
+        assert timefoo_stdout_regex.match(captured_stdouterr.out) is not None
+
 
 
 class TestBenchmarkMemory(object):
