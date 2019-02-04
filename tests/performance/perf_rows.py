@@ -30,38 +30,37 @@ one_m = BASE_ROWS * (10**6 / 10)
 ten_m = BASE_ROWS * (10**7 / 10)
 
 
-@bench.timethis
+@bench.timethis()
+@bench.trackmem()
 def gen_1k():
     rs = resultset.ResultSet([one_k], None, ORDER_MAP)
 
-@bench.timethis
+@bench.timethis()
+@bench.trackmem()
 def gen_10k():
     rs = resultset.ResultSet([ten_k], None, ORDER_MAP)
 
-@bench.timethis
+@bench.timethis()
+@bench.trackmem()
 def gen_100k():
-    mem_init = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
     rs = resultset.ResultSet([hun_k], None, ORDER_MAP)
-    mem_final = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-    print mem_init / 1024 / 1024
-    print("Initial Memory: {:14} B".format(mem_init))
-    print("  Final Memory: {:14} B".format(mem_final))
-    print("  Usage Memory: {:14} MB".format((mem_final - mem_init)/1024/1024))
 
-@bench.timethis
+@bench.timethis()
+@bench.trackmem()
 def gen_1m():
     rs = resultset.ResultSet([one_m], None, ORDER_MAP)
 
-@bench.timethis
+@bench.timethis()
+@bench.trackmem()
 def gen_10m():
     rs = resultset.ResultSet([ten_m], None, ORDER_MAP)
 
 
 if __name__=='__main__':
-    gen_1k()
-    gen_10k()
-    gen_100k()
-    gen_1m()
-    #gen_10m()
+    #gen_1k()
+    #gen_10k()
+    #gen_100k()
+    #gen_1m()
+    gen_10m()
     print("done")
 

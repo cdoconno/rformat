@@ -153,6 +153,7 @@ class Row(object):
     """
     Row of data that can be initialized from tuple, list, dict
     """
+    __slots__ = ('data')
     def __init__(self, values, rowdef=None):
         self.data = self._normalize_row(values, rowdef)
 
