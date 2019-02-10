@@ -93,7 +93,7 @@ class ResultSet(object):
         for row in self.generate_rows:
             #log.debug("processing row: %s" % (row))
             self.addrow(row)
-        log.debug("rows: %s, rowcount: %s, errors: %s, errorcount: %s" % (self.rows, self.row_count, self.errors, self.error_count))
+        log.debug("rows: %s, rowcount: %s, errors: %s, errorcount: %s" % (len(self.rows), self.row_count, self.errors, self.error_count))
 
     def addrow(self, row):
         """
