@@ -7,4 +7,5 @@ need small changes
 import os
 from . import resultset
 
+name = "rformat"
 __version__ = '0.0.1'
