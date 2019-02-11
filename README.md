@@ -99,5 +99,5 @@ And then data is returned in the following structure, which can be passed direct
   ]
 ]
 ```
-The ordermap config uses integer and float keys for ordering
+The ordermap config uses integer and float keys for ordering.
 
