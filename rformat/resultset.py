@@ -2,7 +2,7 @@
 
 import logging
 import sys
-import collections
+from collections import namedtuple, OrderedDict
 import types
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
@@ -55,7 +55,7 @@ class Results(object):
 
 class ResultSet(object):
     """
-    Single set of results containing row objects
+    Single set of results containing row objects.
     """
     def __init__(self, results, headers=None, order_map=None):
         if order_map:
@@ -63,7 +63,7 @@ class ResultSet(object):
         else:
             self.order_map = order_map
         self.headers, self.header_source = self._manageheaders(headers)
-        self.rowdef = collections.namedtuple("RsRow", self.headers, verbose=False, rename=True)
+        self.rowdef = namedtuple("RsRow", self.headers, rename=True)
         self.generate_rows = None
         self.rows = []
         self.errors = []
@@ -76,7 +76,7 @@ class ResultSet(object):
 
     def _initresults(self, results):
         """
-        Determine what was type results were passed and handle accordingly.
+        Determine what type results were passed and handle accordingly.
         """
         if type(results) is types.GeneratorType:
             self.generate_rows = results
@@ -126,7 +126,7 @@ class ResultSet(object):
             else:
                 return headers, "headers"
         if headers is None:
-            if type(self.order_map) != collections.OrderedDict:
+            if type(self.order_map) != OrderedDict:
                 raise TypeError("ResultSet() requires order_map as dict with no headers. provided:  type(self.order_map)")
             else:
                 return list(self.order_map.values()), "order_map"
@@ -145,7 +145,7 @@ class ResultSet(object):
             print("%s[TIP]%s     : check that all keys provided in order map can be converted to floats" % ('\033[1m', '\033[0m'))
             raise
 
-        return collections.OrderedDict([(ck, order_map[k]) for k, ck in sorted(converted_keys, key=lambda x: x[1])])
+        return OrderedDict([(ck, order_map[k]) for k, ck in sorted(converted_keys, key=lambda x: x[1])])
 
             
     

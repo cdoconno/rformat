@@ -21,7 +21,7 @@ class TestRow(object):
         assert list(r.data) == eqcheck # test data correct 
         assert r.data.a == 1 # test we can access data fields with dot notation
         #assert r.data.get('a', None) == 1 # test we can access data fields with get notation
-        #assert r.rowdef is rs.rowdef # test standalone row rowdef is reference to result set rowdef
+        #assert r.rowdef is rs.rowdef # test standalone row roweef is reference to result set rowdef
         assert r.rowdef() == rs.rowdef._fields
 
     @pytest.mark.parametrize("values", [
@@ -126,7 +126,9 @@ class TestResultSet(object):
     ], scope="class")
     def test_result_sort_order_map_sorts_dict_by_int_keys(self, test_order_map, ordered_map_keys):
         assert type(resultset.ResultSet._sort_order_map) is types.FunctionType # function exists
-        assert resultset.ResultSet._sort_order_map(test_order_map).keys() == ordered_map_keys
+        #
+        # python3 .keys() can not be accessed by index. It needs to be converted to a list 
+        assert list(resultset.ResultSet._sort_order_map(test_order_map).keys()) == ordered_map_keys
 
     @pytest.mark.parametrize("test_order_map1", [
         ({'x': {}, '1': {}}),   # str keys for character not just digit

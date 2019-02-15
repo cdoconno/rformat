@@ -23,9 +23,9 @@ def timethis(fmt_func=None, verbose=True):
             d = t2-t1
             if verbose:
                 if fmt_func is None:
-                    print(DEFAULT_TIMING_FMT.format(func.func_name, d))
+                    print(DEFAULT_TIMING_FMT.format(func.__name__, d))
                 else:
-                    print(fmt_func(func.func_name, d))
+                    print(fmt_func(func.__name__, d))
             return result
         return time_call
     return decorator
@@ -47,9 +47,9 @@ def trackmem(fmt_func=None, verbose=True, unit="MB"):
             cv = size([m1, m2, usage], unit)
             if verbose:
                 if fmt_func is None:
-                    print(DEFAULT_MEMORY_FMT.format(func.func_name, cv[0], cv[1], cv[2], unit.upper()))
+                    print(DEFAULT_MEMORY_FMT.format(func.__name__, cv[0], cv[1], cv[2], unit.upper()))
                 else:
-                    print(fmt_func(func.func_name, cv[0], cv[1], cv[2], unit.upper()))
+                    print(fmt_func(func.__name__, cv[0], cv[1], cv[2], unit.upper()))
             return result
         return memtrack_call
     return decorator
@@ -66,8 +66,8 @@ def timethis_returnstats(func):
         result = func(*args, **kwargs)
         t2 = tm()
         d = t2-t1
-        print("@timecall: %s took %s seconds" % (func.func_name, d))
-        return result, {'func_name': func.func_name, 'duration': d}
+        print("@timecall: %s took %s seconds" % (func.__name__, d))
+        return result, {'func_name': func.__name__, 'duration': d}
     return time_call
 
 
