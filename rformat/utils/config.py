@@ -7,8 +7,9 @@ def default_config():
     Returns the default options rformat will use
     """
     return {
-       "log_level": "DEBUG"
+        "log_level": "DEBUG"
     }
+
 
 def parse_yaml(confpath):
     """
@@ -16,12 +17,9 @@ def parse_yaml(confpath):
     """
     try:
         filepath = os.path.abspath(confpath)
-    except:
+    except Exception:
         raise TypeError("config not string type required to specify path: %s" % confpath)
     with open(filepath, 'r') as f:
         configs = yaml.safe_load(f)
 
     return configs
-        
-     
-        

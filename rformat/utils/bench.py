@@ -4,8 +4,9 @@ from functools import wraps
 from time import time as tm
 import resource
 
-DEFAULT_TIMING_FMT = "@timecall: {0} took {1} seconds" 
-DEFAULT_MEMORY_FMT = "@trackmem: {0} start: {1} end: {2} used: {3} {4}" 
+DEFAULT_TIMING_FMT = "@timecall: {0} took {1} seconds"
+DEFAULT_MEMORY_FMT = "@trackmem: {0} start: {1} end: {2} used: {3} {4}"
+
 
 def timethis(fmt_func=None, verbose=True):
     """
@@ -20,7 +21,7 @@ def timethis(fmt_func=None, verbose=True):
             t1 = tm()
             result = func(*args, **kwargs)
             t2 = tm()
-            d = t2-t1
+            d = t2 - t1
             if verbose:
                 if fmt_func is None:
                     print(DEFAULT_TIMING_FMT.format(func.__name__, d))
@@ -34,7 +35,6 @@ def timethis(fmt_func=None, verbose=True):
 def trackmem(fmt_func=None, verbose=True, unit="MB"):
     """
     Paramaterized decorator for tracking memory usage of a function calls via resource module
-    
     Note that there has not been any specific review of how gargage collection affects this profiling
     """
     def decorator(func):
@@ -43,7 +43,7 @@ def trackmem(fmt_func=None, verbose=True, unit="MB"):
             m1 = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
             result = func(*args, **kwargs)
             m2 = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-            usage = m2-m1
+            usage = m2 - m1
             cv = size([m1, m2, usage], unit)
             if verbose:
                 if fmt_func is None:
@@ -53,7 +53,7 @@ def trackmem(fmt_func=None, verbose=True, unit="MB"):
             return result
         return memtrack_call
     return decorator
-            
+
 
 def timethis_returnstats(func):
     """
@@ -65,7 +65,7 @@ def timethis_returnstats(func):
         t1 = tm()
         result = func(*args, **kwargs)
         t2 = tm()
-        d = t2-t1
+        d = t2 - t1
         print("@timecall: %s took %s seconds" % (func.__name__, d))
         return result, {'func_name': func.__name__, 'duration': d}
     return time_call
@@ -74,7 +74,7 @@ def timethis_returnstats(func):
 def size(values, unit):
     converted = []
     u = unit.lower()
-    UNITS = ('b','kb','mb','gb')
+    UNITS = ('b', 'kb', 'mb', 'gb')
     if u not in UNITS:
         raise ValueError("Must provide unit as one of %s" % list(UNITS))
     for v in values:
@@ -90,4 +90,3 @@ def size(values, unit):
             raise ValueError("case not handled for unit")
         converted.append(cv)
     return converted
-
