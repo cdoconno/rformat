@@ -6,6 +6,7 @@ def get_readme_md_contents():
         long_description = f.read()
         return long_description
 
+
 #
 # TODO: change version to read from __init__.py
 setup(
@@ -30,4 +31,3 @@ setup(
         "Programming Language :: Python :: 2.7",
     ]
 )
-
