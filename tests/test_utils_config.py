@@ -3,6 +3,7 @@ import sys
 
 from rformat.utils import config
 
+
 class TestConfig(object):
     def test_parse_yaml_raises_type_error_if_provided_nonstring_for_path(self):
         with pytest.raises(TypeError):
@@ -20,9 +21,8 @@ class TestConfig(object):
             opts = config.parse_yaml("./tests/configs/test.yaml")
         except TypeError:
             pytest.fail("Raised a TypeError when provided string for path. If running in test the test file is in tests/configs/test.yaml")
-        assert type(opts) is dict # test you get a dict back when providing valid yaml
-        assert opts == {'log_level': 'INFO', 'version': '0.0.0'} # test the contents are parsed properly
-
+        assert type(opts) is dict  # test you get a dict back when providing valid yaml
+        assert opts == {'log_level': 'INFO', 'version': '0.0.0'}  # test the contents are parsed properly
 
     def test_default_config_returns_dict(self):
         assert type(config.default_config()) is dict
