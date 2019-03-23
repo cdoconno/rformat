@@ -14,8 +14,8 @@ setup(
     version="0.0.1",
     tests_require=["pytest"],
     packages=[
-        'rformat',
-        'rformat.utils',
+        'rsformat',
+        'rsformat.utils',
     ],
     author="Chris O'Connor",
     long_description=get_readme_md_contents(),

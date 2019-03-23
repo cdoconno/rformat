@@ -1,7 +1,7 @@
 import pytest
 import sys
 
-from rformat.utils import config
+from rsformat.utils import config
 
 
 class TestConfig(object):

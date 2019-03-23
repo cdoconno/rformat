@@ -7,7 +7,7 @@ import uuid
 # Python 2.x 3.x compatibility
 from six.moves import xrange
 
-from rformat.utils import bench
+from rsformat.utils import bench
 
 @bench.timethis_returnstats
 def foo(x):

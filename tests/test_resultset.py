@@ -3,7 +3,7 @@ import sys
 import collections
 import types
 
-from rformat import resultset 
+from rsformat import resultset 
 
 class TestRow(object):
     @pytest.mark.parametrize("it,it_type,it_headers,order_map,eqcheck", [

@@ -2,8 +2,8 @@ import sys
 import resource
 import copy
 
-from rformat import resultset
-from rformat.utils import bench
+from rsformat import resultset
+from rsformat.utils import bench
 
 # TEST DATA GENERATED WITH https://www.json-generator.com
 # Copy this into 1k, 10k, 100k, 1M, 10M rows - not unue
