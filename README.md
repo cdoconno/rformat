@@ -8,7 +8,7 @@ rsformat is a nested list proccessor that helps manage:
   * column functions
   * default values
   
-Based on a config, it reformats and returns data in a new structure. rsformat can be used as a runtime formatter, with a config being supplied at time of call, or it can be preconfigured, passing along new result sets to the configured rsformat object. rsformat can be incorporated into a stream processor for pipelining.  
+Based on a config, it reformats and returns data in a new structure. rsformat can be used as a runtime formatter, with a config being supplied at time of call, or it can be preconfigured, passing along new result sets to the configured rsformat object. rsformat can be incorporated into a stream processor for pipelining and plans to support coroutine architechture
  
 ## Example
 rsformat excels when you have a standard query result format or a denormalized row, but different consumers require custom views. This turns the formatting into a config based operation instead of an explicit release to the underlying data server. 
@@ -100,4 +100,6 @@ And then data is returned in the following structure, which can be passed direct
 ]
 ```
 The ordermap config uses integer and float keys for ordering.
+
+
 
